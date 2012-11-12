@@ -1,4 +1,5 @@
 set(cpufreq_pxd
+  cpufreq/__init__.pxd
   cpufreq/_cpufreq.pxd
   cpufreq/cpufreq.pxd
   )
