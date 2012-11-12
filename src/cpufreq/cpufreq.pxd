@@ -36,6 +36,7 @@ cpdef get_all_transition_latencies()
 cdef class Limits:
     cdef readonly unsigned long max
     cdef readonly unsigned long min
+    cpdef to_dict(self)
 cpdef Limits get_hardware_limits(unsigned int cpu)
 cpdef get_all_hardware_limits()
 
@@ -45,6 +46,7 @@ cpdef get_all_drivers()
 cdef class Policy(Limits):
     cdef readonly governor
     cdef int set_policy(self, cpufreq_policy *_policy) except -1
+    cpdef to_dict(self)
 cpdef Policy get_policy(unsigned int cpu)
 cpdef get_all_policies()
 
@@ -63,6 +65,7 @@ cpdef get_all_related_cpus()
 cdef class Stat:
     cdef readonly unsigned long frequency
     cdef readonly unsigned long long time_in_state
+    cpdef to_dict(self)
 cpdef get_stats(unsigned int cpu)
 cpdef get_all_stats()
 

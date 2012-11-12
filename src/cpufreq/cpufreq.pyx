@@ -79,11 +79,11 @@ cpdef get_all_transition_latencies():
 cdef class Limits:
     def __getitem__(self, key):
         return getattr(self, key)
-    def __iter__(self):
+    cpdef to_dict(self):
         return {
             "max": self.max,
             "min": self.min
-        }.items().__iter__()
+        }
 
 cpdef Limits get_hardware_limits(unsigned int cpu):
     cdef unsigned long _min
@@ -137,12 +137,10 @@ cdef class Policy(Limits):
         else:
             self.governor = None
         return 0
-    def __iter__(self):
-        return {
-            "max": self.max,
-            "min": self.min,
-            "governor": self.governor
-        }.items().__iter__()
+    cpdef to_dict(self):
+        d = Limits.to_dict(self)
+        d.update({"governor": self.governor})
+        return d
 
 cpdef Policy get_policy(unsigned int cpu):
     cdef cpufreq_policy *_policy = cpufreq_get_policy(cpu)
@@ -268,11 +266,11 @@ cdef class Stat:
         pass
     def __getitem__(self, key):
         return getattr(self, key)
-    def __iter__(self):
+    cpdef to_dict(self):
         return {
             "frequency": self.frequency,
             "time_in_state": self.time_in_state
-        }.items().__iter__()
+        }
 
 cpdef get_stats(unsigned int cpu):
     cdef cpufreq_stats *cpus
