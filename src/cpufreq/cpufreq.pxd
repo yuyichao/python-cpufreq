@@ -20,6 +20,8 @@ from libc.stdlib cimport *
 from cpufreq._cpufreq cimport *
 
 cpdef cpu_exists(unsigned int cpu)
+cpdef int update_cpus_number()
+cpdef set_cache_cpu_number(cache)
 cpdef int cpus_number()
 
 cpdef unsigned long get_freq_kernel(unsigned int cpu) except 0
