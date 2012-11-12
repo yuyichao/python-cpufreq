@@ -60,11 +60,8 @@ cpdef get_driver(unsigned int cpu):
     return driver
 
 cdef class Policy:
-    cdef cpufreq_policy *_policy
     def __cinit__(self):
         self._policy = NULL
-    cdef set_policy(self, cpufreq_policy *_policy):
-        self._policy = _policy
     def __dealloc__(self):
         if self._policy:
             cpufreq_put_policy(self._policy)
@@ -84,12 +81,15 @@ cdef class Policy:
                 raise ValueError
             return self._policy.governor.decode('utf-8')
 
+cdef __set_policy(Policy self, cpufreq_policy *_policy):
+    self._policy = _policy
+
 cpdef Policy get_policy(unsigned int cpu):
     cdef cpufreq_policy *_policy = cpufreq_get_policy(cpu)
     if not _policy:
         raise ValueError
     cdef Policy policy = Policy()
-    policy.set_policy(_policy)
+    __set_policy(policy, _policy)
     return policy
 
 cpdef get_available_governors(unsigned int cpu):
@@ -146,8 +146,6 @@ cpdef get_related_cpus(unsigned int cpu):
     return res
 
 cdef class Stat:
-    cdef readonly unsigned long frequency
-    cdef readonly unsigned long long time_in_state
     def __cinit__(self, unsigned long frequency,
                   unsigned long long time_in_state):
         self.frequency = frequency

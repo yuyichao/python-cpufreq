@@ -1,5 +1,6 @@
 set(cpufreq_pxd
   cpufreq/_cpufreq.pxd
+  cpufreq/cpufreq.pxd
   )
 set(cpufreq_py
   cpufreq/__init__.py
