@@ -31,15 +31,16 @@ cpdef get_all_freqs_hardware()
 cpdef unsigned long get_transition_latency(unsigned int cpu) except 0
 cpdef get_all_transition_latencies()
 
-cpdef get_hardware_limits(unsigned int cpu)
+cdef class Limits:
+    cdef readonly unsigned long max
+    cdef readonly unsigned long min
+cpdef Limits get_hardware_limits(unsigned int cpu)
 cpdef get_all_hardware_limits()
 
 cpdef get_driver(unsigned int cpu)
 cpdef get_all_drivers()
 
-cdef class Policy:
-    cdef readonly unsigned long max
-    cdef readonly unsigned long min
+cdef class Policy(Limits):
     cdef readonly governor
     cdef int set_policy(self, cpufreq_policy *_policy) except -1
 cpdef Policy get_policy(unsigned int cpu)

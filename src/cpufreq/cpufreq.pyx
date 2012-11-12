@@ -64,13 +64,25 @@ cpdef get_all_transition_latencies():
         res[i] = cpufreq_get_transition_latency(i)
     return res
 
-cpdef get_hardware_limits(unsigned int cpu):
+cdef class Limits:
+    def __getitem__(self, key):
+        return getattr(self, key)
+    def __iter__(self):
+        return {
+            "max": self.max,
+            "min": self.min
+        }.items().__iter__()
+
+cpdef Limits get_hardware_limits(unsigned int cpu):
     cdef unsigned long _min
     cdef unsigned long _max
     cdef int res = cpufreq_get_hardware_limits(cpu, &_min, &_max)
     if res:
         raise ValueError
-    return _min, _max
+    limit = Limits()
+    limit.max = _max
+    limit.min = _min
+    return limit
 
 cpdef get_all_hardware_limits():
     cdef int n = cpus_number()
@@ -102,7 +114,7 @@ cpdef get_all_drivers():
             pass
     return res
 
-cdef class Policy:
+cdef class Policy(Limits):
     def __cinit__(self):
         self.governor = None
     cdef int set_policy(self, cpufreq_policy *_policy) except -1:
@@ -113,6 +125,12 @@ cdef class Policy:
         else:
             self.governor = None
         return 0
+    def __iter__(self):
+        return {
+            "max": self.max,
+            "min": self.min,
+            "governor": self.governor
+        }.items().__iter__()
 
 cpdef Policy get_policy(unsigned int cpu):
     cdef cpufreq_policy *_policy = cpufreq_get_policy(cpu)
@@ -236,6 +254,13 @@ cdef class Stat:
     def __init__(self, unsigned long frequency,
                  unsigned long long time_in_state):
         pass
+    def __getitem__(self, key):
+        return getattr(self, key)
+    def __iter__(self):
+        return {
+            "frequency": self.frequency,
+            "time_in_state": self.time_in_state
+        }.items().__iter__()
 
 cpdef get_stats(unsigned int cpu):
     cdef cpufreq_stats *cpus
