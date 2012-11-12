@@ -20,10 +20,10 @@ from libc.stdlib cimport *
 from cpufreq._cpufreq cimport *
 
 cpdef cpu_exists(unsigned int cpu)
-cpdef int cpu_numbers()
+cpdef int cpus_number()
 
 cpdef unsigned long get_freq_kernel(unsigned int cpu) except 0
-cpdef get_all_freqs_kernal()
+cpdef get_all_freqs_kernel()
 
 cpdef unsigned long get_freq_hardware(unsigned int cpu) except 0
 cpdef get_all_freqs_hardware()

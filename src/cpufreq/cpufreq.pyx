@@ -17,7 +17,7 @@
 cpdef cpu_exists(unsigned int cpu):
     return not cpufreq_cpu_exists(cpu)
 
-cpdef int cpu_numbers():
+cpdef int cpus_number():
     # hopefully there is always at least one cpu...
     cdef unsigned int i = 1
     while True:
@@ -31,8 +31,8 @@ cpdef unsigned long get_freq_kernel(unsigned int cpu) except 0:
         raise ValueError
     return freq
 
-cpdef get_all_freqs_kernal():
-    cdef int n = cpu_numbers()
+cpdef get_all_freqs_kernel():
+    cdef int n = cpus_number()
     res = [None] * n
     for i in range(n):
         res[i] = cpufreq_get_freq_kernel(i)
@@ -45,7 +45,7 @@ cpdef unsigned long get_freq_hardware(unsigned int cpu) except 0:
     return freq
 
 cpdef get_all_freqs_hardware():
-    cdef int n = cpu_numbers()
+    cdef int n = cpus_number()
     res = [None] * n
     for i in range(n):
         res[i] = cpufreq_get_freq_hardware(i)
@@ -58,7 +58,7 @@ cpdef unsigned long get_transition_latency(unsigned int cpu) except 0:
     return res
 
 cpdef get_all_transition_latencies():
-    cdef int n = cpu_numbers()
+    cdef int n = cpus_number()
     res = [None] * n
     for i in range(n):
         res[i] = cpufreq_get_transition_latency(i)
@@ -73,7 +73,7 @@ cpdef get_hardware_limits(unsigned int cpu):
     return _min, _max
 
 cpdef get_all_hardware_limits():
-    cdef int n = cpu_numbers()
+    cdef int n = cpus_number()
     res = [None] * n
     for i in range(n):
         try:
@@ -93,7 +93,7 @@ cpdef get_driver(unsigned int cpu):
     return driver
 
 cpdef get_all_drivers():
-    cdef int n = cpu_numbers()
+    cdef int n = cpus_number()
     res = [None] * n
     for i in range(n):
         try:
@@ -126,7 +126,7 @@ cpdef Policy get_policy(unsigned int cpu):
     return policy
 
 cpdef get_all_policies():
-    cdef int n = cpu_numbers()
+    cdef int n = cpus_number()
     res = [None] * n
     for i in range(n):
         try:
@@ -150,7 +150,7 @@ cpdef get_available_governors(unsigned int cpu):
     return res
 
 cpdef get_all_available_governors():
-    cdef int n = cpu_numbers()
+    cdef int n = cpus_number()
     res = [None] * n
     for i in range(n):
         try:
@@ -173,7 +173,7 @@ cpdef get_available_frequencies(unsigned int cpu):
     return res
 
 cpdef get_all_available_frequencies():
-    cdef int n = cpu_numbers()
+    cdef int n = cpus_number()
     res = [None] * n
     for i in range(n):
         try:
@@ -196,7 +196,7 @@ cpdef get_affected_cpus(unsigned int cpu):
     return res
 
 cpdef get_all_affected_cpus():
-    cdef int n = cpu_numbers()
+    cdef int n = cpus_number()
     res = [None] * n
     for i in range(n):
         try:
@@ -219,7 +219,7 @@ cpdef get_related_cpus(unsigned int cpu):
     return res
 
 cpdef get_all_related_cpus():
-    cdef int n = cpu_numbers()
+    cdef int n = cpus_number()
     res = [None] * n
     for i in range(n):
         try:
@@ -252,7 +252,7 @@ cpdef get_stats(unsigned int cpu):
     return total_time, res
 
 cpdef get_all_stats():
-    cdef int n = cpu_numbers()
+    cdef int n = cpus_number()
     res = [None] * n
     for i in range(n):
         try:
@@ -268,7 +268,7 @@ cpdef unsigned long get_transitions(unsigned int cpu) except 0:
     return res
 
 cpdef get_all_transitions():
-    cdef int n = cpu_numbers()
+    cdef int n = cpus_number()
     res = [None] * n
     for i in range(n):
         res[i] = cpufreq_get_transitions(i)
