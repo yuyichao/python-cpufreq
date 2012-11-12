@@ -17,13 +17,25 @@
 cpdef cpu_exists(unsigned int cpu):
     return not cpufreq_cpu_exists(cpu)
 
-cpdef int cpus_number():
+cdef int _cpu_number = 0
+cdef int _cache_cpu_number = 0
+
+cpdef int update_cpus_number():
     # hopefully there is always at least one cpu...
     cdef unsigned int i = 1
     while True:
         if cpufreq_cpu_exists(i) != 0:
+            _cpu_number = i
             return i
         i += 1
+
+cpdef set_cache_cpu_number(cache):
+    _cache_cpu_number = 1 if cache else 0
+
+cpdef int cpus_number():
+    if _cache_cpu_number and _cpu_number > 0:
+        return _cpu_number
+    return update_cpus_number()
 
 cpdef unsigned long get_freq_kernel(unsigned int cpu) except 0:
     cdef unsigned long freq = cpufreq_get_freq_kernel(cpu)
